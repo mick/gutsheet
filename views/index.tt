@@ -29,13 +29,13 @@
                       <pre>curl -X POST http://sheets.recollect.net/to/json --data-binary @bikes.xls > bikes.json</pre>
                       <p>Or, to have the converted data POSTed to another server, use <code>X-callback</code> header.</p>
                       <pre>curl -X POST http://sheets.recollect.net/to/json \
-      -H "X-callback: http://cat-information.com" \
+      -H "X-callback: http://www.postbin.org/1ej9ip2" \
       --data-binary @bikes.csv</pre>
                     </li>
 
                     <li>
                         <h3>Receive the payload</h3>
-                        <p>If you used the <code>X-callback</code> header, then your webserver should receive the response.</p>
+                        <p>If you used the <code>X-callback</code> header, then your webserver should receive the response. The above example will send data to <a href="http://www.postbin.org/1ej9ip2">PostBin</a>.</p>
                         <p>Otherwise, you should receive the result in the response payload.</p>
                     </li>
 

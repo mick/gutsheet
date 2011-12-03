@@ -4,6 +4,7 @@ use JSON qw/encode_json/;
 use Spreadsheet::Read;
 use DateTime::Format::Excel;
 use Text::CSV_XS;
+use LWP::UserAgent;
 
 our $VERSION = '0.1';
 
@@ -13,8 +14,7 @@ get '/' => sub {
 
 post '/to/json' => sub {
     my $data = parse_sheet();
-    header 'Content-Type' => 'application/json';
-    return encode_json $data;
+    return gut_response('application/json' => encode_json $data);
 };
 
 post '/to/csv' => sub {
@@ -28,8 +28,24 @@ post '/to/csv' => sub {
         $csv->combine(map { $row->{$_} } @headers);
         $str .= $csv->string . "\n";
     }
-    return $str;
+    return gut_response('text/csv' => \$str);
 };
+
+sub gut_response {
+    my ($ct, $body) = @_;
+    if (my $url = request->header('X-callback')) {
+        my $ua = LWP::UserAgent->new(agent => "gutsheet-$VERSION");
+        my $resp = $ua->post($url, 'Content-Type' => $ct, Content => $body);
+        header 'Content-Type' => 'text/plain';
+        if ($resp->is_success) {
+            return "KTHX";
+        }
+        return "ONOES: " . $resp->status_line;
+    }
+    header 'Content-Type' => 'application/json';
+    return $body;
+}
+
 
 sub parse_sheet {
     my $data = ReadData(request->body,
