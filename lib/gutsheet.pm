@@ -40,12 +40,11 @@ sub parse_sheet {
         # Remove all trailing lines and columns that have no visual data
         clip  => 1,
     );
-    my $type = $data->[0]{type};
 
-    # Grab the headers out of the first column
+    # This is hardcoded to only extract the first sheet.
     my $cells = $data->[1]{cell};
     shift @$cells; # 0 col is empty
-    my ($headers, $row_max) = extract_headers($cells);
+    my ($headers, $start_row, $row_max) = extract_headers($cells);
 
     # Now pivot the table from Col/Row to Row/Col
     my @rows;
@@ -71,8 +70,9 @@ sub parse_sheet {
 
 sub extract_headers {
     my $cells = shift;
+    my $starting_row = shift || 0;
+    my $row_max = $starting_row;
     my @headers;
-    my $row_max = 0;
     my $default_name = "A";
     my $found_a_header = 0;
     for my $col (@$cells) {
@@ -87,9 +87,9 @@ sub extract_headers {
         push @headers, { name => $name };
         $row_max = @$col if $row_max < @$col;
     }
-    return extract_headers($cells) unless $found_a_header;
+    return extract_headers($cells, $starting_row+1) unless $found_a_header;
 
-    return \@headers, $row_max;
+    return \@headers, $starting_row, $row_max;
 }
 
 true;
