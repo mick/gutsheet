@@ -43,18 +43,9 @@ sub parse_sheet {
     my $type = $data->[0]{type};
 
     # Grab the headers out of the first column
-    my @headers;
     my $cells = $data->[1]{cell};
     shift @$cells; # 0 col is empty
-    my $row_max = 0;
-    my $col_name = "A";
-    for my $col (@$cells) {
-        shift @$col; # 0 row is empty
-        my $name = shift(@$col) || "Column $col_name";
-        $col_name++;
-        push @headers, { name => $name };
-        $row_max = @$col if $row_max < @$col;
-    }
+    my ($headers, $row_max) = extract_headers($cells);
 
     # Now pivot the table from Col/Row to Row/Col
     my @rows;
@@ -62,7 +53,7 @@ sub parse_sheet {
         my %row;
         my $c = 0;
         for my $col (@$cells) {
-            my $header = $headers[$c++]->{name};
+            my $header = $headers->[$c++]->{name};
             my $val = shift @$col;
             if ($val and $header =~ m/date|time/i and $val =~ m/^\d+$/) {
                 my $dt = DateTime::Format::Excel->parse_datetime($val);
@@ -73,9 +64,32 @@ sub parse_sheet {
         push @rows, \%row;
     }
     $data = {
-        headers => \@headers,
+        headers => $headers,
         rows => \@rows,
     };
+}
+
+sub extract_headers {
+    my $cells = shift;
+    my @headers;
+    my $row_max = 0;
+    my $default_name = "A";
+    my $found_a_header = 0;
+    for my $col (@$cells) {
+        my $name = shift(@$col);
+        if ($name) {
+            $found_a_header++;
+        }
+        else {
+            $name = "Column $default_name";
+        }
+        $default_name++;
+        push @headers, { name => $name };
+        $row_max = @$col if $row_max < @$col;
+    }
+    return extract_headers($cells) unless $found_a_header;
+
+    return \@headers, $row_max;
 }
 
 true;
