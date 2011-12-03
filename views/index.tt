@@ -43,6 +43,11 @@
                         <h3>Learn more …</h3>
                         <p>This service uses a <a href="http://search.cpan.org/~hmbrand/Spreadsheet-Read-0.45/Read.pm">library</a> to try to read <strong>any</strong> spreadsheet such as OpenOffice, Microsoft Excel, and CSV data.</p>
                         <p>You can <strong>export</strong> to JSON by posting to <code>/to/json</code>, or to CSV by posting to <code>/to/csv</code>.
+                        <h4>Features to add</h4>
+                        <ul>
+                          <li>Better date support - look at cell formatting to determine if it is a date.</li>
+                          <li>Support multiple sheets</li>
+                        </ul>
                     </li>
 
                   </ol>
