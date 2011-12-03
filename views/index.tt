@@ -1,0 +1,60 @@
+<div id="page">
+
+      <div id="content">
+        <div class="page-header">
+            <h1>Spreadsheet Gutter 
+            <small>Get the yummy filet out, leaving behind the junk.</small></h1>
+        </div>
+        <div class="row">
+            <div class="span10">
+                <div id="getting-started">
+                  <h2>Getting started</h2>
+                  <h3>Here&rsquo;s how to use this service:</h3>
+                            
+                  <ol>          
+                    <li>
+                      <h3>Find a spreadsheet you want to convert</h3>
+
+                      <p>
+                        Download it to your computer.
+                      </p>
+                    </li>
+
+                    <li>
+                      <h3>Send your sheet to this service</h3>
+
+                      <p> To have your data returned in the response body:</p>
+                      <pre>curl -X POST http://localhost:5000 --data-binary @cats.xls</pre>
+                      <p>Or, to have the converted data POSTed to another server, use <code>X-callback</code> header.</p>
+                      <pre>curl -X POST http://localhost:5000 \
+      -H "X-callback: http://cat-information.com" \
+      --data-binary @cats.csv</pre>
+                    </li>
+
+                    <li>
+                        <h3>Receive the payload</h3>
+                        <p>If you used the <code>X-callback</code> header, then your webserver should receive the response.</p>
+                        <p>Otherwise, you should receive the result in the response payload.</p>
+                    </li>
+
+                  </ol>
+                </div>
+            </div>
+            <div class="span4">
+              <div id="sidebar">
+                <ul id="sidebar-items">
+                  <li>
+                    <h3>About this Service</h3>
+                    <ul class="links">
+                      <li><a href="http://github.com/lukec/gitsheet">Source code</a></li>
+                      <li><a href="http://github.com/maxogden/gut">Service design (gut)</a></li>
+                      <li><a href="http://twitter.com/lukec">Author: @lukec</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
