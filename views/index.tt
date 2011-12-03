@@ -24,9 +24,9 @@
                       <h3>Send your sheet to this service</h3>
 
                       <p> To have your data returned in the response body:</p>
-                      <pre>curl -X POST http://localhost:5000 --data-binary @cats.xls</pre>
+                      <pre>curl -X POST http://sheets.recollect.net/to/json --data-binary @cats.xls</pre>
                       <p>Or, to have the converted data POSTed to another server, use <code>X-callback</code> header.</p>
-                      <pre>curl -X POST http://localhost:5000 \
+                      <pre>curl -X POST http://sheets.recollect.net/to/json \
       -H "X-callback: http://cat-information.com" \
       --data-binary @cats.csv</pre>
                     </li>
@@ -35,6 +35,12 @@
                         <h3>Receive the payload</h3>
                         <p>If you used the <code>X-callback</code> header, then your webserver should receive the response.</p>
                         <p>Otherwise, you should receive the result in the response payload.</p>
+                    </li>
+
+                    <li>
+                        <h3>Learn more …</h3>
+                        <p>This service uses a <a href="http://search.cpan.org/~hmbrand/Spreadsheet-Read-0.45/Read.pm">library</a> to try to read <strong>any</strong> spreadsheet such as OpenOffice, Microsoft Excel, and CSV data.</p>
+                        <p>You can <strong>export</strong> to JSON by posting to <code>/to/json</code>, or to CSV by posting to <code>/to/csv</code>.
                     </li>
 
                   </ol>
